@@ -78,7 +78,7 @@ void	ft_one_child(int i, t_node **gc, t_cmd *token)
 	file = 0;
 	path = NULL;
 	signal(SIGINT, ft_signal_handler_herdoc);
-	signal(SIGQUIT, ft_signal_handler_herdoc);
+	signal(SIGQUIT, ft_signal_back_slash);
 	ft_check_file(token, file, gc, token->her);
 	path = ft_check_path((token->cmd)[0], gc, token);
 	if (path == NULL)

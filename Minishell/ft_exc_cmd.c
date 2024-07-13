@@ -60,6 +60,11 @@ void ft_exc_cmd(t_node *line, t_node **gc, t_cmd *env)
 		handle_quotes(env, gc);
 		if (env->heredoc != NULL)
 			ft_find_herdoc(env, &i, id, gc);
+		if(env->flag_signle == 1)
+			{
+				ft_lstclear(gc);
+				return ;
+			}
 		if ((count_cmd(line) == 1) && (i == 0))
 			if ((ft_check_buldin1(env, (char *)line->data, gc)) == 0)
 			{

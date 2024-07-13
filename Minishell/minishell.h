@@ -21,17 +21,11 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-typedef struct s_history
-{
-	int					number_of_history;
-	char				*history;
-	struct s_history	*next;
-}						t_history;
-
 typedef struct s_cmd
 {
 	int				**fd;
 	int 			flag;
+	int             flag_signle;
 	char			*access_path;
 	char			**env;
 	char			**cmd;
@@ -40,7 +34,6 @@ typedef struct s_cmd
 	t_node			*heredoc;
 	t_node			*append;
 	t_env			*like_env;
-	t_history			*history;
 	int				count;
 	int				her;
 	int				file;
@@ -50,6 +43,8 @@ typedef struct s_cmd
 	char *env_line;
 }					t_cmd;
 
+t_cmd *shell(void);
+void ft_signal_back_slash(int signum);
 void				*gc_malloc(t_node **gc, int size);
 char				**ft_split_str(char *str, char *charset);
 char				**ft_split(char *s, char c, t_node **gc);

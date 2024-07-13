@@ -1,14 +1,5 @@
 #include "../minishell.h"
 
-void ft_history(t_cmd *token)
-{
-    t_history *head = token->history;
-    while (head != NULL)
-    {
-        printf("%d  %s\n", head->number_of_history, head->history);
-        head = head->next;
-    }
-}
 int	checkchar(char a, char *b)
 {
 	int	i;
@@ -90,8 +81,6 @@ void	ft_check_buldin(t_cmd *env, char *line, t_node **gc)
 		ft_env(env);
 	else if (ft_strcmp((env->cmd)[0], "unset") == 0)
 		ft_unset(env, line);
-	else if (ft_strcmp((env->cmd)[0], "history") == 0)
-		ft_history(env);
 }
 int	ft_check_buldin1(t_cmd *env, char *line, t_node **gc)
 {
@@ -111,8 +100,6 @@ int	ft_check_buldin1(t_cmd *env, char *line, t_node **gc)
 	else if (ft_strcmp((env->cmd)[0], "env") == 0)
 		n = 0;
 	else if (ft_strcmp((env->cmd)[0], "unset") == 0)
-		n = 0;
-	else if (ft_strcmp((env->cmd)[0], "history") == 0)
 		n = 0;
 	return (n);
 }

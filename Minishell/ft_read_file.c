@@ -25,52 +25,66 @@ int	count_herdoc(t_node *herdoc)
 	return (number);
 }
 
- void	ft_signal_handler_herdoc(int signum)
+void ft_signal_back_slash(int signum)
 {
-	if (signum == SIGINT)
-    	{
-        	ft_putstr_fd("\n", 1);
-        	exit(1);
-    	}
+	printf("ssssssssssssss\n");
 	if(signum == SIGQUIT)
 	{
-		ft_putstr_fd("\n", 1);
-        	exit(1);
+		write(1, "Quit\n", 6);
+        exit(131); // Exit if SIGINT is received
 	}
 }
-void	ft_find_herdoc(t_cmd *env, int *i, int *id, t_node **gc)
-{
-	char	*str;
 
-	str = NULL;
-	ft_fork_pipe(env, id, *i, gc);
-	if (id[*i] == 0)
-	{
-		signal(SIGINT, ft_signal_handler_herdoc);
-		close((env->fd)[*i][0]);
-		while (env->heredoc)
-		{
-			while (1)
-			{
-				str = readline("herdoc> ");
-				if (str == NULL || (ft_strcmp(env->heredoc->data, str) == 0))
-					break ;
-				str = ft_strjoin(gc, str, "\n");
-				if (env->heredoc->next == NULL)
-					write((env->fd)[*i][1], str, ft_strlen(str));
-			}
-			if (env->heredoc->next == NULL)
-				close((env->fd)[*i][1]);
-			env->heredoc = env->heredoc->next;
-		}
-		exit(0);
-	}
-	else
-	{
-		close((env->fd)[*i][1]);
-		waitpid(id[*i], 0, 0);
-	}
-	(*i)++;
+void ft_signal_handler_herdoc(int signum)
+{
+    if (signum == SIGINT)
+    {
+        write(1, "\n", 1);
+        exit(130); // Exit if SIGINT is received
+    }
+}
+
+void ft_find_herdoc(t_cmd *env, int *i, int *id, t_node **gc)
+{
+    char *str = NULL;
+
+    ft_fork_pipe(env, id, *i, gc);
+    if (id[*i] == 0) // Child process
+    {
+        close((env->fd)[*i][0]);
+        signal(SIGINT, ft_signal_handler_herdoc);
+
+        while (env->heredoc)
+        {
+            while (1)
+            {
+                str = readline("heredoc> ");
+                if (str == NULL || (ft_strcmp(env->heredoc->data, str) == 0))
+                    break;
+
+                char *temp = str;
+                str = ft_strjoin(gc, str, "\n");
+                free(temp);
+
+                if (env->heredoc->next == NULL)
+                    write((env->fd)[*i][1], str, ft_strlen(str));
+            }
+            if (env->heredoc->next == NULL)
+                close((env->fd)[*i][1]);
+
+            env->heredoc = env->heredoc->next;
+        }
+        exit(0);
+    }
+    else // Parent process
+    {
+        close((env->fd)[*i][1]);
+        int status;
+        waitpid(id[*i], &status, 0);
+        if (WEXITSTATUS(status) == 130) // Check if child exited due to SIGINT
+            env->flag_signle = 1;
+    }
+    (*i)++;
 }
 
 int	ft_file(char *str)
