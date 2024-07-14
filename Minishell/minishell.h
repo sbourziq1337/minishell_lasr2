@@ -44,6 +44,7 @@ typedef struct s_cmd
 }					t_cmd;
 
 t_cmd *shell(void);
+void	ft_signal_handler(int signum);
 void ft_signal_back_slash(int signum);
 void				*gc_malloc(t_node **gc, int size);
 char				**ft_split_str(char *str, char *charset);

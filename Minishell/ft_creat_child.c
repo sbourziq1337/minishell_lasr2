@@ -129,7 +129,7 @@ void	ft_first_child(int i, t_node **gc, t_cmd *token, char *line)
 	token->file = 0;
 	path = NULL;
 	signal(SIGINT, ft_signal_handler_herdoc);
-	signal(SIGQUIT, ft_signal_handler_herdoc);
+	signal(SIGQUIT, ft_signal_back_slash);
 	ft_all_bildin(i, gc, token, line);
 	// Check if the command is a built-in command
 	close((token->fd)[i][0]);
@@ -169,7 +169,7 @@ void	ft_midll_child(int i, t_node **gc, t_cmd *token, char *line)
 	token->file = 0;
 	path = NULL;
 	signal(SIGINT, ft_signal_handler_herdoc);
-	signal(SIGQUIT, ft_signal_handler_herdoc);
+	signal(SIGQUIT, ft_signal_back_slash);
 	ft_all_bildin(i, gc, token, line);
 	// Check if the command is a built-in command
 	close((token->fd)[i][0]);
@@ -212,7 +212,7 @@ void	ft_last_child(int i, t_node **gc, t_cmd *token, char *line)
 	token->file = 0;
 	path = NULL;
 	signal(SIGINT, ft_signal_handler_herdoc);
-	signal(SIGQUIT, ft_signal_handler_herdoc);
+	signal(SIGQUIT, ft_signal_back_slash);
 	if (ft_check_buldin1(token, line, gc) == 0)
 	{
 		ft_check_file(token, token->file, gc, token->her);

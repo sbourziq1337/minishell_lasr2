@@ -5,6 +5,7 @@ t_cmd *shell(void)
 	static t_cmd shell;
 	return(&shell);
 }
+
 int ft_isspace(char c)
 {
 	if (c == ' ' || c == '\t')
@@ -64,7 +65,7 @@ void split_pipe(char *cmd, t_cmd *env, t_node **gc)
 	ft_exc_cmd(link_cmd, gc, env);
 }
 
-static void	ft_signal_handler(int signum)
+void	ft_signal_handler(int signum)
 {
 	(void)signum;
 	 ft_putstr_fd("\n", 1);
@@ -87,7 +88,6 @@ int	main(int argc, char **argv, char **envp)
 	t_env *env_list;
 
 	ev.flag = 0;
-	ev.flag_signle = 0;
 	if (envp == NULL || envp[0] == NULL)
     {
 		ev.flag = 1;
@@ -101,6 +101,8 @@ int	main(int argc, char **argv, char **envp)
 	env_list = init_env_list(envp, &fd);
 	ev.addres_env = env_list;
 	ev.addres_fd = fd;
+	signal(SIGINT, ft_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 
 	while (1)
 	{
@@ -109,8 +111,7 @@ int	main(int argc, char **argv, char **envp)
 		line = readline("$ ");
 		if (line != NULL)
 		{
-			signal(SIGINT, ft_signal_handler);
-			signal(SIGQUIT, SIG_IGN);
+			ev.flag_signle = 0;
 			if (input_validation(line) != 1)
 				split_pipe(line, &ev, &gc);
 			add_history(line);

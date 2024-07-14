@@ -27,7 +27,7 @@ int	count_herdoc(t_node *herdoc)
 
 void ft_signal_back_slash(int signum)
 {
-	printf("ssssssssssssss\n");
+	write(1, "sddsdsdsdsdsdsdsdsds\n\n",23);
 	if(signum == SIGQUIT)
 	{
 		write(1, "Quit\n", 6);
@@ -39,6 +39,7 @@ void ft_signal_handler_herdoc(int signum)
 {
     if (signum == SIGINT)
     {
+		sleep(1);
         write(1, "\n", 1);
         exit(130); // Exit if SIGINT is received
     }
